@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Rive Animation</title>
+    <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
+    <style>
+        h1 {
+            color: green;
+            background-color: rgb(236, 255, 217);
+            text-align: center;
+            font-family: avant-garde, sans-serif, calibri; 
+        }
+        canvas {
+            cursor: pointer;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>Mohit Singh (IT) &nbsp;&nbsp;&nbsp;and &nbsp;&nbsp;&nbsp;Devansh Chaurasia (ICE)</h1>
+        <h1>24124070 &nbsp;&nbsp;&nbsp; and &nbsp;&nbsp;&nbsp; 24106031</h1>
+        <canvas id="rive-canvas" width="500" height="500"></canvas>
+        <br>
+        <button id="playPause">Pause</button>
+        <button id="reset">Reset</button>
+    </center>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof rive !== 'undefined') {
+                const canvas = document.getElementById('rive-canvas');
+                const playPauseBtn = document.getElementById('playPause');
+                const resetBtn = document.getElementById('reset');
+                
+                const riveInstance = new rive.Rive({
+                    src: 'logo_animation_XCEED.riv',
+                    canvas: canvas,
+                    autoplay: true,
+                    stateMachines: "State Machine 1",
+                    onLoad: () => {
+                        console.log('Rive animation loaded successfully!');
+                    },
+                    onError: (error) => {
+                        console.error('Error loading Rive animation:', error);
+                    }
+                });
+                
+                let isPlaying = true;
+                playPauseBtn.addEventListener('click', () => {
+                    if (isPlaying) {
+                        riveInstance.pause();
+                        playPauseBtn.textContent = "Play";
+                    } else {
+                        riveInstance.play();
+                        playPauseBtn.textContent = "Pause";
+                    }
+                    isPlaying = !isPlaying;
+                });
+                
+                resetBtn.addEventListener('click', () => {
+                    riveInstance.reset();
+                    riveInstance.play();
+                    playPauseBtn.textContent = "Pause";
+                    isPlaying = true;
+                });
+                
+                canvas.addEventListener('click', () => {
+                    riveInstance.fireState('ClickTrigger');
+                });
+            } else {
+                console.error('Rive library is not loaded.');
+            }
+        });
+    </script>
+</body>
+</html>
